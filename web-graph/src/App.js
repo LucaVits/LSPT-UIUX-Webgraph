@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import SearchBar from "./components/SearchBar";
+import GraphPage from "./components/GraphPage";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <h1>WebGraph Example</h1>
+        {/* Search bar component */}
+        <SearchBar />
+        
+        {/* Define Routes */}
+        <Routes>
+          {}
+          <Route path="/" element={<p>Please search for a graph.</p>} />
+          
+          {}
+          <Route path="/:name" element={<GraphPage />} />
+        </Routes>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;

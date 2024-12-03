@@ -1,0 +1,22 @@
+[
+  {
+    "nodes": [
+      { "id": "1", "title": "Node 1", "link": "https://google.com", "size": 10, "color": "red" },
+      { "id": "2", "title": "Node 2", "link": "https://google.com", "size": 15, "color": "blue" },
+      { "id": "3", "title": "Node 3", "link": "https://google.com", "size": 20, "color": "green" }
+    ],
+    "edges": [
+      { "source": "1", "target": "2" },
+      { "source": "2", "target": "3" }
+    ]
+  },
+  {
+    "nodes": [
+      { "id": "A", "title": "Node A", "link": "https://google.com", "size": 10, "color": "purple" },
+      { "id": "B", "title": "Node B", "link": "https://google.com", "size": 15, "color": "orange" }
+    ],
+    "edges": [
+      { "source": "A", "target": "B" }
+    ]
+  }
+]
