@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import GraphPage from "./GraphPage";
+import axios from 'axios';
+
+
 
 const SearchBar = () => {
   const [query, setQuery] = useState("");
@@ -19,16 +23,27 @@ const SearchBar = () => {
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-  const handleSearch = (event) => {
-    if (event.key === "Enter" && query) {
-      const selected = data.find((item) =>
-        item.title.toLowerCase() === query.toLowerCase()
-      );
-      if (selected) {
-        navigate(`/${selected.id}`);
-      }
-    }
-  };
+  function handleSearch() {
+    const url = 'http://lspt-link-analysis.cs.rpi.edu:1234/uiux/graph';
+  
+    // Make API call
+    axios.get(url)
+      .then((response) => {
+        const jsonData = response.data;
+  
+        // Store the data in localStorage or pass it to another function/file
+        localStorage.setItem('graphData', JSON.stringify(jsonData));
+  
+        // Optionally, you can update the DOM or trigger another action to display it
+        console.log('JSON file downloaded and saved to localStorage:', jsonData);
+  
+        // Call a function to display this data
+        GraphPage(jsonData);
+      })
+      .catch((error) => {
+        console.error('Error during the request:', error.message);
+      });
+  }
 
   const handleInputChange = (e) => {
     const searchValue = e.target.value;
