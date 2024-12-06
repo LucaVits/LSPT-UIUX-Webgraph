@@ -1,0 +1,55 @@
+{
+    "nodes": [
+        {
+            "id": 0,
+            "url": "www.google.com",
+            "page_rank": 0.26350092871017655
+        },
+        {
+            "id": 1,
+            "url": "www.def.com",
+            "page_rank": 0.3890253266052211
+        },
+        {
+            "id": 2,
+            "url": "www.rpi.edu",
+            "page_rank": 0.11582458156153419
+        },
+        {
+            "id": 3,
+            "url": "www.boogle.com",
+            "page_rank": 0.11582458156153419
+        },
+        {
+            "id": 4,
+            "url": "www.youtube.com",
+            "page_rank": 0.11582458156153419
+        }
+    ],
+    "edges": [
+        {
+            "source": 0,
+            "target": 1
+        },
+        {
+            "source": 0,
+            "target": 1
+        },
+        {
+            "source": 2,
+            "target": 0
+        },
+        {
+            "source": 2,
+            "target": 0
+        },
+        {
+            "source": 4,
+            "target": 0
+        },
+        {
+            "source": 4,
+            "target": 1
+        }
+    ]
+}
