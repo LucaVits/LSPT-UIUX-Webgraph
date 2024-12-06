@@ -4,7 +4,7 @@ const createInfoBox = (title, singleLineText, multilineText) => {
   return (
     <div
       style={{
-        position: "relative",
+        position: "absolute",
         background: "white",
         border: "2px solid black",
         borderRadius: "10px",

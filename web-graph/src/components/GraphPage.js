@@ -26,7 +26,6 @@ const GraphPage = () => {
 
   return (
     <div>
-      <h1>{name} WebGraph</h1>
       {loading ? (
         <p>Loading data...</p>
       ) : (

@@ -8,7 +8,6 @@ const SearchBar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch the JSON file from the public folder
     fetch(`${process.env.PUBLIC_URL}/json/items/item1.json`)
       .then((response) => {
         if (!response.ok) {
@@ -52,63 +51,65 @@ const SearchBar = () => {
     navigate(`/${result.id}`);
   };
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "8vh"
-      }}
-    >
-      <div style={{ position: "relative", width: "200px" }}>
-        <input
-          type="text"
-          value={query}
-          onChange={handleInputChange}
-          onKeyDown={handleSearch}
-          placeholder="Search for a result"
-          style={{
-            width: "100%",
-            padding: "8px",
-            boxSizing: "border-box",
-          }}
-        />
-        {filteredResults.length > 0 && (
-          <ul
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "8vh",
+          marginBottom: "20px"
+        }}
+      >
+        <div style={{ position: "relative", width: "600px" }}>
+          <input
+            type="text"
+            value={query}
+            onChange={handleInputChange}
+            onKeyDown={handleSearch}
+            placeholder="Search for a result"
             style={{
-              position: "absolute",
-              top: "100%",
-              left: 0,
-              right: 0,
-              backgroundColor: "white",
-              border: "1px solid #ccc",
-              listStyleType: "none",
-              margin: 0,
-              padding: 0,
-              maxHeight: "150px",
-              overflowY: "auto",
-              zIndex: 1000,
+              width: "100%",
+              padding: "16px",
+              boxSizing: "border-box",
             }}
-          >
-            {filteredResults.map((result) => (
-              <li
-                key={result.id}
-                onClick={() => handleSelectResult(result)}
-                style={{
-                  padding: "8px",
-                  cursor: "pointer",
-                  borderBottom: "1px solid #ccc",
-                }}
-              >
-                {result.title}
-              </li>
-            ))}
-          </ul>
-        )}
+          />
+          {filteredResults.length > 0 && (
+            <ul
+              style={{
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                right: 0,
+                backgroundColor: "white",
+                border: "1px solid #ccc",
+                listStyleType: "none",
+                margin: 0,
+                padding: 0,
+                maxHeight: "150px",
+                overflowY: "auto",
+                zIndex: 1000,
+              }}
+            >
+              {filteredResults.map((result) => (
+                <li
+                  key={result.id}
+                  onClick={() => handleSelectResult(result)}
+                  style={{
+                    padding: "8px",
+                    cursor: "pointer",
+                    borderBottom: "1px solid #ccc",
+                  }}
+                >
+                  {result.title}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
-    </div>
-  );
-};
-
-export default SearchBar;
+    );
+  };
+  
+  export default SearchBar;
+  
