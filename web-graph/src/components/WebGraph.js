@@ -66,11 +66,11 @@ const WebGraph = ({ datasets, width = 800, height = 600, renderInfoBox }) => {
             .attr("y", d => d.y - 15);
 
           if (selectedNode) {
-            infoLine
-              .attr("x1", selectedNode.x)
-              .attr("y1", selectedNode.y)
-              .attr("x2", width - 200)
-              .attr("y2", 20);
+          infoLine
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => 100)
+            .attr("y2", d => 100);
           }
         });
     } else {
@@ -118,10 +118,10 @@ const WebGraph = ({ datasets, width = 800, height = 600, renderInfoBox }) => {
 
     const infoLine = svg
       .selectAll(".info-line")
-      .data(selectedNode ? [selectedNode] : [])
+      .data(linksRef.current)
       .join("line")
       .attr("class", "info-line")
-      .attr("stroke", "black")
+      .attr("stroke", "#999")
       .attr("stroke-width", 1.5);
 
     function boundaryForce(width, height) {
@@ -162,10 +162,6 @@ const WebGraph = ({ datasets, width = 800, height = 600, renderInfoBox }) => {
             position: "absolute",
             top: "20px",
             right: "20px",
-            background: "white",
-            border: "1px solid black",
-            borderRadius: "5px",
-            padding: "10px",
             pointerEvents: "auto",
             zIndex: 10
           }}
