@@ -1,0 +1,61 @@
+[
+  {
+    "nodes": [
+      {
+        "id": "1",
+        "title": "Node 1",
+        "link": "https://google.com",
+        "size": 10,
+        "page_rank": 0.5
+      },
+      {
+        "id": "2",
+        "title": "Node 2",
+        "link": "https://google.com",
+        "size": 15,
+        "page_rank": 0
+      },
+      {
+        "id": "3",
+        "title": "Node 3",
+        "link": "https://google.com",
+        "size": 20,
+        "page_rank": 1
+      }
+    ],
+    "edges": [
+      {
+        "source": "1",
+        "target": "2"
+      },
+      {
+        "source": "2",
+        "target": "3"
+      }
+    ]
+  },
+  {
+    "nodes": [
+      {
+        "id": "A",
+        "title": "Node A",
+        "link": "https://google.com",
+        "size": 10,
+        "page_rank": 0.9
+      },
+      {
+        "id": "B",
+        "title": "Node B",
+        "link": "https://google.com",
+        "size": 15,
+        "page_rank": 0.3
+      }
+    ],
+    "edges": [
+      {
+        "source": "A",
+        "target": "B"
+      }
+    ]
+  }
+]
