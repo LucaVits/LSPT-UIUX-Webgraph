@@ -6,7 +6,7 @@ import createInfoBox from "./CreateInfoBox";
 
 const GraphPage = () => {
   const { name } = useParams();
-  const [datasets, setDatasets] = useState([]);
+  const [dataset, setDataset] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -15,9 +15,13 @@ const GraphPage = () => {
     fetch(`/json/graphs/${name}.json`)
       .then((response) => response.json())
       .then((data) => {
-        // Ensure we handle both single object and array of objects
-        const graphData = Array.isArray(data) ? data : [data];
-        setDatasets(graphData);
+        const mergedData = Array.isArray(data)
+          ? {
+              nodes: data.flatMap(graph => graph.nodes || []),
+              edges: data.flatMap(graph => graph.edges || [])
+            }
+          : data;
+        setDataset(mergedData);
         setLoading(false);
       })
       .catch((error) => {
@@ -30,22 +34,19 @@ const GraphPage = () => {
     <div>
       {loading ? (
         <p>Loading data...</p>
-      ) : datasets.length > 0 ? (
-        datasets.map((dataset, index) => (
-          <WebGraph
-            key={index}
-            datasets={dataset}
-            renderInfoBox={(node) =>
-              createInfoBox(
-                node.title,
-                `${node.link}`,
-                `This is node ${node.title}, which has the color ${node.color}.`
-              )
-            }
-            width={800}
-            height={600}
-          />
-        ))
+      ) : dataset && dataset.nodes && dataset.edges ? (
+        <WebGraph
+          datasets={dataset}
+          renderInfoBox={(node) =>
+            createInfoBox(
+              node.title,
+              `${node.link}`,
+              `This is node ${node.title}, which has the color ${node.color}.`
+            )
+          }
+          width={800}
+          height={400}
+        />
       ) : (
         <p>No data found for this graph.</p>
       )}
