@@ -15,7 +15,9 @@ const GraphPage = () => {
     fetch(`/json/graphs/${name}.json`)
       .then((response) => response.json())
       .then((data) => {
-        setDatasets(data);
+        // Ensure we handle both single object and array of objects
+        const graphData = Array.isArray(data) ? data : [data];
+        setDatasets(graphData);
         setLoading(false);
       })
       .catch((error) => {
@@ -28,10 +30,11 @@ const GraphPage = () => {
     <div>
       {loading ? (
         <p>Loading data...</p>
-      ) : (
-        datasets.length > 0 && (
+      ) : datasets.length > 0 ? (
+        datasets.map((dataset, index) => (
           <WebGraph
-            datasets={datasets}
+            key={index}
+            datasets={dataset}
             renderInfoBox={(node) =>
               createInfoBox(
                 node.title,
@@ -42,9 +45,10 @@ const GraphPage = () => {
             width={800}
             height={600}
           />
-        )
+        ))
+      ) : (
+        <p>No data found for this graph.</p>
       )}
-      {datasets.length === 0 && !loading && <p>No data found for this graph.</p>}
     </div>
   );
 };

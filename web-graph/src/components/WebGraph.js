@@ -9,24 +9,23 @@ const WebGraph = ({ datasets, width = 800, height = 600, renderInfoBox }) => {
   const linksRef = useRef([]);
 
   function interpolateColor(value) {
-  const clampedValue = Math.max(0, Math.min(1, value));
+    const clampedValue = Math.max(0, Math.min(1, value));
+    const red = [230, 0, 0];
+    const yellow = [230, 255, 0];
+    const green = [0, 230, 0];
 
-  const red = [230, 0, 0];
-  const yellow = [230, 255, 0];
-  const green = [0, 230, 0];
-
-  if (clampedValue <= 0.5) {
-    const t = clampedValue * 2;
-    return `rgb(${lerp(red[0], yellow[0], t)}, ${lerp(red[1], yellow[1], t)}, ${lerp(red[2], yellow[2], t)})`;
+    if (clampedValue <= 0.5) {
+      const t = clampedValue * 2;
+      return `rgb(${lerp(red[0], yellow[0], t)}, ${lerp(red[1], yellow[1], t)}, ${lerp(red[2], yellow[2], t)})`;
+    }
+    
+    const t = (clampedValue - 0.5) * 2;
+    return `rgb(${lerp(yellow[0], green[0], t)}, ${lerp(yellow[1], green[1], t)}, ${lerp(yellow[2], green[2], t)})`;
   }
-  
-  const t = (clampedValue - 0.5) * 2;
-  return `rgb(${lerp(yellow[0], green[0], t)}, ${lerp(yellow[1], green[1], t)}, ${lerp(yellow[2], green[2], t)})`;
-}
 
-function lerp(start, end, t) {
-  return Math.round(start + (end - start) * t);
-}
+  function lerp(start, end, t) {
+    return Math.round(start + (end - start) * t);
+  }
 
   useEffect(() => {
     if (!nodesRef.current.length || !linksRef.current.length) {
@@ -34,29 +33,53 @@ function lerp(start, end, t) {
       const mergedEdges = [];
       const graphOffset = 200;
 
-      datasets.forEach((data, index) => {
-        const xOffset = (index % 3) * graphOffset;
-        const yOffset = Math.floor(index / 3) * graphOffset;
+      if (Array.isArray(datasets)) {
+        datasets.forEach((data, index) => {
+          const xOffset = (index % 3) * graphOffset;
+          const yOffset = Math.floor(index / 3) * graphOffset;
+
+          const nodeMap = new Map();
+          data.nodes.forEach(node => {
+            const newNode = {
+              ...node,
+              x: node.x || Math.random() * width + xOffset,
+              y: node.y || Math.random() * height + yOffset,
+              id: `${index}-${node.id}`
+            };
+            nodeMap.set(node.id, newNode.id);
+            mergedNodes.push(newNode);
+          });
+
+          data.edges.forEach(edge => {
+            mergedEdges.push({
+              source: nodeMap.get(edge.source),
+              target: nodeMap.get(edge.target)
+            });
+          });
+        });
+      } else if (datasets && datasets.nodes && datasets.edges) {
+        const xOffset = 0;
+        const yOffset = 0;
 
         const nodeMap = new Map();
-        data.nodes.forEach(node => {
+        datasets.nodes.forEach(node => {
           const newNode = {
             ...node,
             x: node.x || Math.random() * width + xOffset,
             y: node.y || Math.random() * height + yOffset,
-            id: `${index}-${node.id}`
+            id: node.id
           };
           nodeMap.set(node.id, newNode.id);
           mergedNodes.push(newNode);
         });
 
-        data.edges.forEach(edge => {
+        datasets.edges.forEach(edge => {
           mergedEdges.push({
             source: nodeMap.get(edge.source),
             target: nodeMap.get(edge.target)
           });
         });
-      });
+      }
 
       nodesRef.current = mergedNodes;
       linksRef.current = mergedEdges;
@@ -84,14 +107,6 @@ function lerp(start, end, t) {
           labels
             .attr("x", d => d.x)
             .attr("y", d => d.y - 15);
-
-          if (selectedNode) {
-          infoLine
-            .attr("x1", d => d.source.x)
-            .attr("y1", d => d.source.y)
-            .attr("x2", d => 100)
-            .attr("y2", d => 100);
-          }
         });
     } else {
       simulationRef.current.nodes(nodesRef.current);
@@ -114,9 +129,7 @@ function lerp(start, end, t) {
       .attr("class", "node")
       .attr("r", d => d.size)
       .attr("fill", d => interpolateColor(d.page_rank))
-      //.attr("stroke", d => (selectedNode?.id === d.id ? "black" : "none"))
       .attr("stroke", d => "black")
-      //.attr("stroke-width", 3)
       .attr("stroke-width", d => (selectedNode?.id === d.id ? 3 : 0.4))
       .call(d3.drag()
         .on("start", dragStarted)
@@ -137,14 +150,6 @@ function lerp(start, end, t) {
       .style("font-size", "12px")
       .style("pointer-events", "none")
       .text(d => d.title);
-
-    const infoLine = svg
-      .selectAll(".info-line")
-      .data(linksRef.current)
-      .join("line")
-      .attr("class", "info-line")
-      .attr("stroke", "#999")
-      .attr("stroke-width", 1.5);
 
     function boundaryForce(width, height) {
       return function () {
