@@ -21,8 +21,12 @@ const GraphPage = () => {
               edges: data.flatMap(graph => graph.edges || [])
             }
           : data;
-        setDataset(mergedData);
-        setLoading(false);
+
+        // Introduce a delay
+        setTimeout(() => {
+          setDataset(mergedData);
+          setLoading(false);
+        }, 2000); // Delay 2 seconds, should be lowered once it's confirmed that it works like this
       })
       .catch((error) => {
         console.error("Error loading data:", error);
