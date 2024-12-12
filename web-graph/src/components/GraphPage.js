@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import WebGraph from "./WebGraph";
 import createInfoBox from "./CreateInfoBox";
 
-const GraphPage = () => {
+const GraphPage = (jsonData) => { // recieve jsonData from API
   const { name } = useParams();
   const [dataset, setDataset] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -12,7 +12,8 @@ const GraphPage = () => {
   useEffect(() => {
     setLoading(true);
 
-    fetch(`/json/graphs/${name}.json`)
+    fetch(jsonData) // pass jsonData into the fetch request
+      // then process said data
       .then((response) => response.json())
       .then((data) => {
         const mergedData = Array.isArray(data)
@@ -26,7 +27,7 @@ const GraphPage = () => {
         setTimeout(() => {
           setDataset(mergedData);
           setLoading(false);
-        }, 2000); // Delay 2 seconds, should be lowered once it's confirmed that it works like this
+        }, 1000); // Delay progression for 1 second to allow json to populate from API call
       })
       .catch((error) => {
         console.error("Error loading data:", error);
